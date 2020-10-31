@@ -1,5 +1,9 @@
 ;;; Rock paper Scissors
 
+(defparameter player-score 0)
+(defparameter computer-score 0)
+(defparameter total-rounds 0)
+(defparameter game-round 0)
 
 (defun prompt()
   (format t "Please enter your play (rock / paper / scissors): ")
@@ -40,9 +44,24 @@
       ((= result 2) '"computer"))))
 
 (defun game ()
-  (let ((result (single-game)))
-    (if (string= result "draw")
-        '"Its a Draw!"
-        (if (string= result "player")
-            '"You Win!"
-            '"You Loose!"))))
+  (setf game-round 0)
+  (setf player-score 0)
+  (setf computer-score 0)
+  (format t "Rock Paper Scissors~%~%")
+  (format t "How many rounds do you want to play? ")
+  (force-output)
+  (let ((total-rounds (parse-integer (read-line))))
+    (loop while (< game-round total-rounds)
+          do (incf game-round)
+             (format t "Round ~A~%" game-round)
+             (let ((result (single-game)))
+               (if (string= result "draw")
+                   (format t "It's a Draw~%")
+                   (if (string= result "player")
+                       (progn
+                         (incf player-score)
+                         (format t "You Win!~%"))
+                       (progn
+                         (incf computer-score)
+                         (format t "You Loose~%"))))))
+    (format t "~%Scores~%Player: ~A    Computer: ~A~%" player-score computer-score)))
